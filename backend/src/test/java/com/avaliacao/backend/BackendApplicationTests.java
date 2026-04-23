@@ -8,5 +8,6 @@ class BackendApplicationTests {
 
     @Test
     void contextLoads() {
+        // Teste basico: valida se o contexto Spring sobe sem erros.
     }
 }

@@ -21,6 +21,7 @@
         <java.version>21</java.version>
     </properties>
 
+    <!-- Dependencias principais da aplicacao -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,6 +74,7 @@
         </dependency>
     </dependencies>
 
+    <!-- Plugin para empacotar e executar o projeto Spring Boot -->
     <build>
         <plugins>
             <plugin>

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+// Define os metadados exibidos no Swagger UI.
 @OpenAPIDefinition(
         info = @Info(
                 title = "Sistema Fullstack Java React API",

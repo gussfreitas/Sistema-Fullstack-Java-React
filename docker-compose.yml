@@ -1,6 +1,7 @@
 version: "3.3"
 
 services:
+  # Servico do backend Spring Boot.
   backend:
     build:
       context: ./backend
@@ -15,8 +16,10 @@ services:
       SPRING_H2_CONSOLE_ENABLED: "true"
       SPRING_H2_CONSOLE_PATH: /h2-console
     volumes:
+      # Volume para persistir dados do H2 entre reinicios.
       - h2_data:/data
     restart: unless-stopped
 
 volumes:
+  # Volume nomeado usado pelo banco H2 em arquivo.
   h2_data:

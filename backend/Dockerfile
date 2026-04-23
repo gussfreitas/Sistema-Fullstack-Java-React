@@ -1,3 +1,4 @@
+# Etapa de build: compila o projeto e gera o jar.
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
@@ -7,11 +8,13 @@ RUN mvn -q -DskipTests dependency:go-offline
 COPY src ./src
 RUN mvn -q -DskipTests clean package
 
+# Etapa de runtime: usa imagem menor apenas para executar a aplicacao.
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 COPY --from=build /app/target/backend-*.jar app.jar
 
+# Porta HTTP padrao da aplicacao.
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
