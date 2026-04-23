@@ -1,38 +1,63 @@
 package com.avaliacao.backend.config;
 
+import com.avaliacao.backend.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+        public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Configuracao basica de seguranca para ambiente de desenvolvimento.
         http
+                                // API REST nao usa formulario web com CSRF token.
                 .csrf(AbstractHttpConfigurer::disable)
+                                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Swagger e H2 Console ficam publicos para facilitar testes.
+                                                // Endpoints publicos de autenticacao e utilitarios de dev.
                         .requestMatchers(
+                                                                "/auth/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/h2-console/**"
                         ).permitAll()
-                        // Qualquer outra rota continua protegida por autenticacao.
+                                                // Todas as demais rotas exigem token valido.
                         .anyRequest().authenticated()
                 )
                 // Necessario para exibir o H2 Console em iframe.
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                                .httpBasic(AbstractHttpConfigurer::disable)
+                                .formLogin(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
+
+        @Bean
+        PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
+
+        @Bean
+        AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+                return config.getAuthenticationManager();
+        }
 }
