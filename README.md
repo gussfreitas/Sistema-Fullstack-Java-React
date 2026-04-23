@@ -13,14 +13,13 @@ Projeto backend em Spring Boot com suporte a execução local e via Docker.
 - Lombok
 - Validation
 
-## Como executar localmente
-
-### Pré-requisitos
+## Pré-requisitos
 
 - JDK 21
 - Maven
+- Docker e Docker Compose (para execução em container)
 
-### Rodar a aplicação
+## Executar localmente
 
 Na raiz do projeto, execute:
 
@@ -29,19 +28,7 @@ cd backend
 mvn spring-boot:run
 ```
 
-A aplicação ficará disponível em:
-
-- API: `http://localhost:8080`
-- H2 Console: `http://localhost:8080/h2-console`
-
-## Como executar com Docker
-
-### Pré-requisitos
-
-- Docker
-- Docker Compose
-
-### Subir a aplicação
+## Executar com Docker
 
 Na raiz do projeto, execute:
 
@@ -55,53 +42,38 @@ Se o seu ambiente usar o comando moderno, também funciona:
 docker compose up --build
 ```
 
-### Acessos
-
-- API: `http://localhost:8080`
-- H2 Console: `http://localhost:8080/h2-console`
-
-### Conexão com o H2 Console
-
-Use os dados abaixo:
-
-- JDBC URL: `jdbc:h2:file:/data/avaliacaodb`
-- User: `sa`
-- Password: vazio
-
-### Parar a aplicação
+Para parar:
 
 ```bash
 docker-compose down
 ```
 
-Ou, se preferir o formato moderno:
-
-```bash
-docker compose down
-```
-
-### Remover os dados do H2
-
-Se quiser apagar também o volume de dados:
+Para remover também o volume de dados do H2:
 
 ```bash
 docker-compose down -v
 ```
 
-## Problema comum com Java 21
+## Acessos
 
-Se aparecer o erro `release version 21 not supported`, o Maven provavelmente está usando uma versão antiga do Java.
+- API: `http://localhost:8080`
+- H2 Console: `http://localhost:8080/h2-console`
 
-### Como verificar
+## Configuração essencial
 
-```bash
-java -version
-javac -version
-mvn -v
-```
+As propriedades principais estão em `backend/src/main/resources/application.properties`:
 
-No resultado de `mvn -v`, a versão do Java deve ser 21.
+- H2
+	- `spring.datasource.url=jdbc:h2:file:./data/avaliacaodb`
+	- `spring.datasource.username=sa`
+	- `spring.h2.console.enabled=true`
+	- `spring.h2.console.path=/h2-console`
+- JWT
+	- `app.jwt.secret=change-me-in-production`
+	- `app.jwt.expiration=86400000`
 
-### Como corrigir
+No H2 Console (quando executando em Docker), use:
 
-Instale e selecione o JDK 21 no seu sistema e tente executar novamente o projeto.
+- JDBC URL: `jdbc:h2:file:/data/avaliacaodb`
+- User: `sa`
+- Password: vazio
