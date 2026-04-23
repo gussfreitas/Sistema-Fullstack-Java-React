@@ -58,6 +58,8 @@ docker-compose down -v
 
 - API: `http://localhost:8080`
 - H2 Console: `http://localhost:8080/h2-console`
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 
 ## Configuração essencial
 
@@ -69,8 +71,10 @@ As propriedades principais estão em `backend/src/main/resources/application.pro
 	- `spring.h2.console.enabled=true`
 	- `spring.h2.console.path=/h2-console`
 - JWT
-	- `app.jwt.secret=change-me-in-production`
+	- `app.jwt.secret` definido no arquivo de configuração
 	- `app.jwt.expiration=86400000`
+
+Observacao: em ambiente real, segredos devem ficar fora do repositório e vir de variáveis de ambiente ou de um gerenciador de secrets.
 
 No H2 Console (quando executando em Docker), use:
 

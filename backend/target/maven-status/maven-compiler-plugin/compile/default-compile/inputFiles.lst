@@ -1,1 +1,3 @@
 /home/freitas/Sistema-Fullstack-Java-React/backend/src/main/java/com/avaliacao/backend/BackendApplication.java
+/home/freitas/Sistema-Fullstack-Java-React/backend/src/main/java/com/avaliacao/backend/config/OpenApiConfig.java
+/home/freitas/Sistema-Fullstack-Java-React/backend/src/main/java/com/avaliacao/backend/config/SecurityConfig.java
