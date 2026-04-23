@@ -1,0 +1,2 @@
+// Exporta componentes reutilizaveis.
+export {};

@@ -1,6 +1,6 @@
 # Sistema-Fullstack-Java-React
 
-Projeto backend em Spring Boot com suporte a execução local e via Docker.
+Projeto fullstack com backend em Spring Boot e frontend em React (Vite).
 
 ## Tecnologias usadas no backend
 
@@ -12,6 +12,14 @@ Projeto backend em Spring Boot com suporte a execução local e via Docker.
 - H2 Database
 - Lombok
 - Validation
+
+## Tecnologias usadas no frontend
+
+- React
+- Vite
+- Axios
+- React Router DOM
+- React Hook Form
 
 ## Pré-requisitos
 
@@ -28,6 +36,14 @@ cd backend
 mvn spring-boot:run
 ```
 
+Em outro terminal, execute o frontend:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
 ## Executar com Docker
 
 Na raiz do projeto, execute:
@@ -41,6 +57,8 @@ Se o seu ambiente usar o comando moderno, também funciona:
 ```bash
 docker compose up --build
 ```
+
+Observacao: o Docker Compose sobe backend e frontend juntos.
 
 Para parar:
 
@@ -60,6 +78,8 @@ docker-compose down -v
 - H2 Console: `http://localhost:8080/h2-console`
 - Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 - OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+- Frontend (local): `http://localhost:5173`
+- Frontend (Docker): `http://localhost:5173`
 
 ## Configuração essencial
 
