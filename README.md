@@ -1,8 +1,8 @@
 # Sistema-Fullstack-Java-React
 
-## 1.1 Setup do Backend (Spring Boot)
+Projeto backend em Spring Boot com suporte a execução local e via Docker.
 
-Backend criado em `backend` com:
+## Tecnologias usadas no backend
 
 - Java 21
 - Maven
@@ -13,32 +13,86 @@ Backend criado em `backend` com:
 - Lombok
 - Validation
 
-### Rodar o backend
+## Como executar localmente
+
+### Pré-requisitos
+
+- JDK 21
+- Maven
+
+### Rodar a aplicação
+
+Na raiz do projeto, execute:
 
 ```bash
-cd /home/freitas/Sistema-Fullstack-Java-React/backend
+cd backend
 mvn spring-boot:run
 ```
 
-### Erro comum: `release version 21 not supported`
+A aplicação ficará disponível em:
 
-Esse erro acontece quando o Maven está usando um Java inferior ao 21.
+- API: `http://localhost:8080`
+- H2 Console: `http://localhost:8080/h2-console`
 
-#### 1) Instalar JDK 21
+## Como executar com Docker
+
+### Pré-requisitos
+
+- Docker
+- Docker Compose
+
+### Subir a aplicação
+
+Na raiz do projeto, execute:
 
 ```bash
-sudo apt update
-sudo apt install openjdk-21-jdk
+docker-compose up --build
 ```
 
-#### 2) Selecionar Java 21
+Se o seu ambiente usar o comando moderno, também funciona:
 
 ```bash
-sudo update-alternatives --config java
-sudo update-alternatives --config javac
+docker compose up --build
 ```
 
-#### 3) Validar versões
+### Acessos
+
+- API: `http://localhost:8080`
+- H2 Console: `http://localhost:8080/h2-console`
+
+### Conexão com o H2 Console
+
+Use os dados abaixo:
+
+- JDBC URL: `jdbc:h2:file:/data/avaliacaodb`
+- User: `sa`
+- Password: vazio
+
+### Parar a aplicação
+
+```bash
+docker-compose down
+```
+
+Ou, se preferir o formato moderno:
+
+```bash
+docker compose down
+```
+
+### Remover os dados do H2
+
+Se quiser apagar também o volume de dados:
+
+```bash
+docker-compose down -v
+```
+
+## Problema comum com Java 21
+
+Se aparecer o erro `release version 21 not supported`, o Maven provavelmente está usando uma versão antiga do Java.
+
+### Como verificar
 
 ```bash
 java -version
@@ -46,11 +100,8 @@ javac -version
 mvn -v
 ```
 
-No resultado de `mvn -v`, a linha `Java version` deve ser `21`.
+No resultado de `mvn -v`, a versão do Java deve ser 21.
 
-#### 4) Executar novamente
+### Como corrigir
 
-```bash
-cd /home/freitas/Sistema-Fullstack-Java-React/backend
-mvn clean spring-boot:run
-```
+Instale e selecione o JDK 21 no seu sistema e tente executar novamente o projeto.
