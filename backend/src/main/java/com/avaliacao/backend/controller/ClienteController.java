@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/clientes")
 @Tag(name = "Clientes")
 @SecurityRequirement(name = "Authorization")
-@PreAuthorize("hasRole('USER')")
 public class ClienteController {
 
     private final ClienteService clienteService;
@@ -38,18 +37,21 @@ public class ClienteController {
 
     @Operation(summary = "Criar cliente")
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ClienteResponseDTO> criar(@Valid @RequestBody ClienteRequestDTO requestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.criar(requestDTO));
     }
 
     @Operation(summary = "Buscar cliente por id")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
     @Operation(summary = "Listar clientes")
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<Page<ClienteResponseDTO>> listarTodos(
             @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
         // Pageable permite paginação e ordenação sem criar parametros extras no controller.
@@ -58,6 +60,7 @@ public class ClienteController {
 
     @Operation(summary = "Atualizar cliente")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ClienteResponseDTO> atualizar(
             @PathVariable Long id,
             @Valid @RequestBody ClienteRequestDTO requestDTO) {
@@ -66,6 +69,7 @@ public class ClienteController {
 
     @Operation(summary = "Excluir cliente")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteService.deletar(id);
         return ResponseEntity.noContent().build();

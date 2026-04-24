@@ -1,5 +1,6 @@
 package com.avaliacao.backend.service.impl;
 
+import com.avaliacao.backend.entity.PerfilUsuario;
 import com.avaliacao.backend.entity.Usuario;
 import com.avaliacao.backend.repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.User;
@@ -22,10 +23,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
 
+        PerfilUsuario perfil = usuario.getPerfil() != null ? usuario.getPerfil() : PerfilUsuario.USER;
+
         return User.builder()
                 .username(usuario.getEmail())
                 .password(usuario.getSenha())
-                .authorities("ROLE_USER")
+            .authorities("ROLE_" + perfil.name())
                 .build();
     }
 }

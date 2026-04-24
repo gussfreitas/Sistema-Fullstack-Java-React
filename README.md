@@ -1,6 +1,6 @@
 # Sistema-Fullstack-Java-React
 
-Sistema Fullstack Java React é uma aplicação web de gestão de clientes com autenticação, cadastro, listagem, edição e exclusão de registros.
+Sistema Fullstack Java-React é uma aplicação web de gestão de clientes com autenticação, cadastro, listagem, edição e exclusão de registros.
 O projeto integra um backend em Spring Boot com JWT, JPA e Swagger, e um frontend em React com Vite, rotas protegidas e consumo da API.
 
 ## Tecnologias

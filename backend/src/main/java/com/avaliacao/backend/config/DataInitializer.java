@@ -1,5 +1,6 @@
 package com.avaliacao.backend.config;
 
+import com.avaliacao.backend.entity.PerfilUsuario;
 import com.avaliacao.backend.entity.Usuario;
 import com.avaliacao.backend.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +16,12 @@ public class DataInitializer {
         return args -> {
             String demoEmail = "admin@lume.com";
 
-            if (usuarioRepository.findByEmail(demoEmail).isPresent()) {
+            Usuario usuarioExistente = usuarioRepository.findByEmail(demoEmail).orElse(null);
+            if (usuarioExistente != null) {
+                if (usuarioExistente.getPerfil() != PerfilUsuario.ADMIN) {
+                    usuarioExistente.setPerfil(PerfilUsuario.ADMIN);
+                    usuarioRepository.save(usuarioExistente);
+                }
                 return;
             }
 
@@ -23,6 +29,7 @@ public class DataInitializer {
             usuario.setNome("Administrador Lume");
             usuario.setEmail(demoEmail);
             usuario.setSenha(passwordEncoder.encode("Lume123!"));
+            usuario.setPerfil(PerfilUsuario.ADMIN);
 
             usuarioRepository.save(usuario);
         };

@@ -3,6 +3,7 @@ package com.avaliacao.backend.service.impl;
 import com.avaliacao.backend.dto.auth.AuthResponseDTO;
 import com.avaliacao.backend.dto.auth.LoginDTO;
 import com.avaliacao.backend.dto.auth.RegistroDTO;
+import com.avaliacao.backend.entity.PerfilUsuario;
 import com.avaliacao.backend.entity.RefreshToken;
 import com.avaliacao.backend.entity.Usuario;
 import com.avaliacao.backend.repository.UsuarioRepository;
@@ -51,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
         usuario.setNome(registroDTO.getNome());
         // Senha sempre salva criptografada.
         usuario.setSenha(passwordEncoder.encode(registroDTO.getSenha()));
+        usuario.setPerfil(PerfilUsuario.USER);
         usuarioRepository.save(usuario);
     }
 
@@ -62,11 +64,7 @@ public class AuthServiceImpl implements AuthService {
         Usuario usuario = usuarioRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado"));
 
-        UserDetails userDetails = User.builder()
-                .username(usuario.getEmail())
-                .password(usuario.getSenha())
-                .authorities("ROLE_USER")
-                .build();
+        UserDetails userDetails = buildUserDetails(usuario);
 
         String accessToken = jwtUtil.generateAccessToken(userDetails);
         String refreshToken = refreshTokenService.createRefreshToken(usuario).getToken();
@@ -81,11 +79,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("Refresh token invalido"));
 
         Usuario usuario = storedToken.getUsuario();
-        UserDetails userDetails = User.builder()
-                .username(usuario.getEmail())
-                .password(usuario.getSenha())
-                .authorities("ROLE_USER")
-                .build();
+        UserDetails userDetails = buildUserDetails(usuario);
 
         String accessToken = jwtUtil.generateAccessToken(userDetails);
         return new AuthResponseDTO(accessToken, refreshToken);
@@ -94,5 +88,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(String refreshToken) {
         refreshTokenService.deleteByToken(refreshToken);
+    }
+
+    private UserDetails buildUserDetails(Usuario usuario) {
+        PerfilUsuario perfil = usuario.getPerfil() != null ? usuario.getPerfil() : PerfilUsuario.USER;
+        return User.builder()
+                .username(usuario.getEmail())
+                .password(usuario.getSenha())
+                .authorities("ROLE_" + perfil.name())
+                .build();
     }
 }

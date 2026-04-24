@@ -2,6 +2,8 @@ package com.avaliacao.backend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +29,10 @@ public class Usuario {
     @Column
     private String nome;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private PerfilUsuario perfil;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -38,6 +44,9 @@ public class Usuario {
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;
+        if (this.perfil == null) {
+            this.perfil = PerfilUsuario.USER;
+        }
     }
 
     @PreUpdate
@@ -75,6 +84,14 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public PerfilUsuario getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(PerfilUsuario perfil) {
+        this.perfil = perfil;
     }
 
     public LocalDateTime getCreatedAt() {
