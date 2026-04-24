@@ -31,10 +31,4 @@ backend/target/
 backend/data/
 *.mv.db
 
-# Test and report files generated for validation
-RELATORIO_TESTE.md
-TESTE_MANUAL.md
-TESTE_RESULTADO.txt
-Relatorio_teste.md
-Teste_manual.md
-Teste_resultado.txt
+
