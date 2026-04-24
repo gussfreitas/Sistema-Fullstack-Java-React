@@ -1,6 +1,7 @@
 # Sistema-Fullstack-Java-React
 
-Projeto fullstack com backend em Spring Boot e frontend em React (Vite).
+Sistema Fullstack Java React é uma aplicação web de gestão de clientes com autenticação, cadastro, listagem, edição e exclusão de registros.
+O projeto integra um backend em Spring Boot com JWT, JPA e Swagger, e um frontend em React com Vite, rotas protegidas e consumo da API.
 
 ## Tecnologias
 
@@ -196,6 +197,29 @@ mvn spring-boot:run
 cd client
 npm install
 npm run dev
+```
+
+## Comandos úteis
+
+```bash
+# Testes do backend
+cd backend
+mvn test
+
+# Build do backend
+cd backend
+mvn clean package
+
+# Lint do frontend
+cd client
+npm run lint
+
+# Build de producao do frontend
+cd client
+npm run build
+
+# Subir tudo com Docker em segundo plano
+docker-compose up -d --build
 ```
 
 ## Endpoints principais
