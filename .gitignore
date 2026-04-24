@@ -31,4 +31,9 @@ backend/target/
 backend/data/
 *.mv.db
 
+# Test reports generated locally
+RELATORIO_TESTE.md
+TESTE_MANUAL.md
+TESTE_RESULTADO.txt
+
 
