@@ -4,6 +4,7 @@ import com.avaliacao.backend.dto.cliente.ClienteRequestDTO;
 import com.avaliacao.backend.dto.cliente.ClienteResponseDTO;
 import com.avaliacao.backend.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/clientes")
 @Tag(name = "Clientes")
+@SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('USER')")
 public class ClienteController {
 

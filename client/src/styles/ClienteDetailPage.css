@@ -1,0 +1,158 @@
+/* Estilos para ClienteDetailPage */
+.cliente-detail-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+  transform: translateY(-2px);
+}
+
+.btn-warning {
+  background-color: #f39c12;
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: #e67e22;
+  transform: translateY(-2px);
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.alert-error {
+  background-color: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 2rem;
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.detail-card {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #eee;
+}
+
+.detail-header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.detail-section {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 6px;
+}
+
+.detail-section h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.detail-field {
+  margin-bottom: 1rem;
+}
+
+.detail-field label {
+  display: block;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.detail-field p {
+  margin: 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .detail-card {
+    padding: 1.5rem;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .detail-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .detail-actions {
+    width: 100%;
+  }
+
+  .detail-actions button {
+    flex: 1;
+  }
+
+  .detail-content {
+    grid-template-columns: 1fr;
+  }
+}

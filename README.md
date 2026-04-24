@@ -2,41 +2,46 @@
 
 Projeto fullstack com backend em Spring Boot e frontend em React (Vite).
 
-## Tecnologias usadas no backend
+## Tecnologias
 
-- Java 21
-- Maven
-- Spring Web
-- Spring Data JPA
-- Spring Security
-- H2 Database
-- Lombok
-- Validation
+Backend:
+- Java 21: linguagem base do backend.
+- Spring Boot: inicialização, configuração e execução da API.
+- Spring Web: criação dos endpoints REST (Auth e Clientes).
+- Spring Data JPA: acesso e persistência de dados (repositories).
+- Spring Security: autenticação/autorização das rotas protegidas.
+- H2 Database: banco de dados em arquivo para ambiente local.
+- JWT: emissão e validação de token de acesso e refresh token.
+- Bean Validation (Jakarta Validation): validações de payload (campos obrigatórios e formato de email).
 
-## Tecnologias usadas no frontend
-
-- React
-- Vite
-- Axios
-- React Router DOM
-- React Hook Form
+Frontend:
+- React 19: construção da interface e composição de componentes.
+- Vite: servidor de desenvolvimento e build do frontend.
+- Axios: cliente HTTP para consumo da API do backend.
+- React Router DOM: roteamento de páginas e proteção de rotas privadas.
+- React Hook Form: gerenciamento de estado e validação de formulários.
 
 ## Pré-requisitos
 
 - JDK 21
 - Maven
-- Docker e Docker Compose (para execução em container)
+- Node.js 20+ e npm
+- Docker e Docker Compose, se quiser subir tudo em container
 
-## Executar localmente
+## Como executar o backend
 
-Na raiz do projeto, execute:
+Na raiz do projeto:
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-Em outro terminal, execute o frontend:
+O backend sobe em `http://localhost:8080`.
+
+## Como executar o frontend
+
+Em outro terminal:
 
 ```bash
 cd client
@@ -44,21 +49,21 @@ npm install
 npm run dev
 ```
 
-## Executar com Docker
+O frontend sobe em `http://localhost:5173`.
 
-Na raiz do projeto, execute:
+## Como executar com Docker
+
+Na raiz do projeto:
 
 ```bash
 docker-compose up --build
 ```
 
-Se o seu ambiente usar o comando moderno, também funciona:
+Ou, se preferir o comando moderno:
 
 ```bash
 docker compose up --build
 ```
-
-Observacao: o Docker Compose sobe backend e frontend juntos.
 
 Para parar:
 
@@ -66,22 +71,32 @@ Para parar:
 docker-compose down
 ```
 
-Para remover também o volume de dados do H2:
+Para remover também o volume do H2:
 
 ```bash
 docker-compose down -v
 ```
 
-## Acessos
+## Como acessar o Swagger
 
-- API: `http://localhost:8080`
-- H2 Console: `http://localhost:8080/h2-console`
+Com o backend rodando, acesse:
+
 - Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 - OpenAPI JSON: `http://localhost:8080/v3/api-docs`
-- Frontend (local): `http://localhost:5173`
-- Frontend (Docker): `http://localhost:5173`
 
-## Configuração essencial
+## Como acessar o frontend
+
+- Localmente: `http://localhost:5173`
+- Com Docker: `http://localhost:5173`
+
+## Credenciais de login de exemplo
+
+O projeto cria automaticamente um usuário de demonstração na inicialização do backend.
+
+- E-mail: `admin@lume.com`
+- Senha: `Lume123!`
+
+## Configuração principal
 
 As propriedades principais estão em `backend/src/main/resources/application.properties`:
 
@@ -91,13 +106,106 @@ As propriedades principais estão em `backend/src/main/resources/application.pro
 	- `spring.h2.console.enabled=true`
 	- `spring.h2.console.path=/h2-console`
 - JWT
-	- `app.jwt.secret` definido no arquivo de configuração
 	- `app.jwt.expiration=86400000`
+	- `app.jwt.refresh-expiration=604800000`
 
-Observacao: em ambiente real, segredos devem ficar fora do repositório e vir de variáveis de ambiente ou de um gerenciador de secrets.
+Observação: em ambiente real, segredos devem sair do repositório e vir de variáveis de ambiente ou de um gerenciador de secrets.
 
-No H2 Console (quando executando em Docker), use:
+No H2 Console, use:
 
-- JDBC URL: `jdbc:h2:file:/data/avaliacaodb`
+- JDBC URL: `jdbc:h2:file:./data/avaliacaodb`
 - User: `sa`
 - Password: vazio
+
+## Diagramas
+
+### Frontend
+
+```text
+root/
+└── frontend/                                # React + Vite
+	└── src/
+		├── api/
+		│   └── axiosConfig.js               # Instância Axios + interceptors
+		├── components/
+		│   ├── Navbar.jsx                   # Botão de logout
+		│   ├── PrivateRoute.jsx             # Proteção de rotas
+		│   └── ClienteForm.jsx              # Formulário reutilizável
+		├── pages/
+		│   ├── LoginPage.jsx                # Login e registro
+		│   ├── ClientesPage.jsx             # Tabela de clientes
+		│   ├── ClienteFormPage.jsx          # Criar e editar
+		│   └── ClienteDetailPage.jsx        # Detalhes do cliente
+		├── services/
+		│   ├── authService.js               # login, logout, register, refresh
+		│   └── clienteService.js            # CRUD de clientes
+		└── utils/
+			├── cpfValidator.js              # Validação de CPF
+			└── cepService.js                # Auto-completar endereço
+```
+
+### Backend
+
+```text
+root/
+└── backend/                                 # Spring Boot
+	└── src/main/java/com/avaliacao/backend/
+		├── config/                          # SecurityConfig, OpenApiConfig, DataInitializer
+		├── controller/                      # AuthController, ClienteController
+		├── dto/                             # LoginDTO, RegistroDTO, ClienteRequestDTO, ClienteResponseDTO
+		├── entity/                          # Usuario, Cliente, RefreshToken
+		├── repository/                      # UsuarioRepository, ClienteRepository, RefreshTokenRepository
+		├── security/                        # JwtUtil, JwtAuthenticationFilter
+		└── service/                         # AuthService, ClienteService, CepService
+```
+
+### Segurança
+
+```text
+Usuário
+└── Frontend
+	├── LoginPage
+	├── axiosConfig interceptor
+	├── localStorage (accessToken + refreshToken)
+	└── PrivateRoute
+
+Frontend
+└── Backend
+	├── POST /auth/login
+	├── JWT gerado no backend
+	├── token enviado como Bearer
+	├── 401 dispara refresh automático
+	└── POST /auth/refresh
+
+Backend
+└── Segurança
+	├── JwtAuthenticationFilter
+	├── JwtUtil
+	├── SecurityConfig
+	└── Spring Security com ROLE_USER
+```
+
+## Execução rápida
+
+```bash
+# Backend
+cd backend
+mvn spring-boot:run
+
+# Frontend
+cd client
+npm install
+npm run dev
+```
+
+## Endpoints principais
+
+- `POST /auth/login`
+- `POST /auth/register`
+- `POST /auth/refresh`
+- `POST /auth/logout`
+- `GET /clientes`
+- `GET /clientes/{id}`
+- `POST /clientes`
+- `PUT /clientes/{id}`
+- `DELETE /clientes/{id}`
